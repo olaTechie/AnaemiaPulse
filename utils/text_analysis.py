@@ -31,6 +31,16 @@ class TextAnalyzer:
         except LookupError:
             nltk.download('wordnet', quiet=True)
 
+        try:
+            nltk.data.find('omw-1.4')
+        except LookupError:
+            nltk.download('omw-1.4', quiet=True)
+
+        try:
+            nltk.data.find('punkt_tab')
+        except LookupError:
+            nltk.download('punkt_tab', quiet=True)
+
         # Initialize stopwords with fallback
         try:
             self.stop_words = set(stopwords.words('english'))
