@@ -94,54 +94,116 @@ class Visualizer:
             'count': country_counts.values
         })
         
+        # Create a standardized country name for aggregation
+        df_map['country_upper'] = df_map['country'].str.upper().str.strip()
+        
+        # Aggregate duplicate countries (sum their counts)
+        df_agg = df_map.groupby('country_upper').agg({'count': 'sum'}).reset_index()
+        
+        # Keep track of original country names for display purposes
+        country_case_map = {}
+        for _, row in df_map.iterrows():
+            # Prefer longer names and names with higher counts
+            if row['country_upper'] not in country_case_map or \
+            (len(row['country']) > len(country_case_map[row['country_upper']]) and row['count'] >= 
+                df_map[df_map['country'] == country_case_map[row['country_upper']]]['count'].values[0]):
+                country_case_map[row['country_upper']] = row['country']
+        
+        # Map the uppercase country names back to proper case
+        df_agg['country'] = df_agg['country_upper'].map(lambda x: country_case_map.get(x, x))
+        
+        # Drop the temporary uppercase column
+        df_map = df_agg[['country', 'count']]
+        
+        # Print debug info
+        # print(f"After aggregation: {len(df_map)} unique countries")
+        
         # Convert country names to ISO codes where possible (for better mapping)
         country_name_to_code = {
-            'USA': 'USA', 'United States': 'USA', 'U.S.A.': 'USA', 'United States of America': 'USA', 'US': 'USA',
-            'UK': 'GBR', 'United Kingdom': 'GBR', 'Great Britain': 'GBR', 'England': 'GBR',
-            'China': 'CHN', "People's Republic of China": 'CHN',
-            'India': 'IND', 'Republic of India': 'IND',
-            'Canada': 'CAN', 'Australia': 'AUS', 'Brazil': 'BRA',
-            'Germany': 'DEU', 'France': 'FRA', 'Italy': 'ITA', 'Spain': 'ESP',
-            'Russia': 'RUS', 'Russian Federation': 'RUS',
-            'Japan': 'JPN', 'South Korea': 'KOR', 'Korea': 'KOR', 'Republic of Korea': 'KOR',
-            'South Africa': 'ZAF', 'Nigeria': 'NGA', 'Kenya': 'KEN', 'Ethiopia': 'ETH',
-            'Sweden': 'SWE', 'Norway': 'NOR', 'Finland': 'FIN', 'Denmark': 'DNK',
-            'Netherlands': 'NLD', 'The Netherlands': 'NLD', 'Holland': 'NLD',
-            'Belgium': 'BEL', 'Switzerland': 'CHE', 'Austria': 'AUT', 
-            'Poland': 'POL', 'Turkey': 'TUR', 'Greece': 'GRC',
-            'Mexico': 'MEX', 'Argentina': 'ARG', 'Chile': 'CHL', 'Colombia': 'COL', 
-            'Peru': 'PER', 'Venezuela': 'VEN', 'Ecuador': 'ECU',
-            'Thailand': 'THA', 'Indonesia': 'IDN', 'Malaysia': 'MYS', 'Singapore': 'SGP',
-            'Vietnam': 'VNM', 'Philippines': 'PHL', 'Myanmar': 'MMR', 'Burma': 'MMR',
-            'Pakistan': 'PAK', 'Bangladesh': 'BGD', 'Sri Lanka': 'LKA', 'Nepal': 'NPL',
-            'Iran': 'IRN', 'Iraq': 'IRQ', 'Saudi Arabia': 'SAU', 'Kuwait': 'KWT',
-            'United Arab Emirates': 'ARE', 'UAE': 'ARE', 'Qatar': 'QAT', 'Oman': 'OMN',
-            'Israel': 'ISR', 'Egypt': 'EGY', 'Morocco': 'MAR', 'Tunisia': 'TUN',
-            'Algeria': 'DZA', 'Libya': 'LBY', 'Sudan': 'SDN', 'Tanzania': 'TZA',
-            'Uganda': 'UGA', 'Ghana': 'GHA', 'Cameroon': 'CMR', 'Senegal': 'SEN',
-            'New Zealand': 'NZL', 'Papua New Guinea': 'PNG', 'Fiji': 'FJI',
-            'Ireland': 'IRL', 'Portugal': 'PRT', 'Romania': 'ROU', 'Hungary': 'HUN',
-            'Czech Republic': 'CZE', 'Czechia': 'CZE', 'Slovakia': 'SVK', 'Slovenia': 'SVN',
-            'Croatia': 'HRV', 'Serbia': 'SRB', 'Bulgaria': 'BGR', 'Ukraine': 'UKR',
-            'Belarus': 'BLR', 'Lithuania': 'LTU', 'Latvia': 'LVA', 'Estonia': 'EST',
+            # Common country name variations
+            'USA': 'USA', 'UNITED STATES': 'USA', 'United States': 'USA', 'U.S.A.': 'USA', 
+            'US': 'USA', 'UNITED STATES OF AMERICA': 'USA', 'United States of America': 'USA',
+            
+            'UK': 'GBR', 'UNITED KINGDOM': 'GBR', 'United Kingdom': 'GBR', 'GREAT BRITAIN': 'GBR', 
+            'Great Britain': 'GBR', 'ENGLAND': 'GBR', 'England': 'GBR',
+            
+            'CHINA': 'CHN', 'PEOPLES R CHINA': 'CHN', "People's Republic of China": 'CHN',
+            'PRC': 'CHN', 'Mainland China': 'CHN',
+            
+            'INDIA': 'IND', 'Republic of India': 'IND',
+            
+            'CANADA': 'CAN', 'AUSTRALIA': 'AUS', 'BRAZIL': 'BRA',
+            'GERMANY': 'DEU', 'Germany': 'DEU', 'Deutschland': 'DEU',
+            'FRANCE': 'FRA', 'ITALY': 'ITA', 'SPAIN': 'ESP',
+            
+            'RUSSIA': 'RUS', 'RUSSIAN FEDERATION': 'RUS', 'Russia': 'RUS',
+            
+            'JAPAN': 'JPN', 'SOUTH KOREA': 'KOR', 'KOREA': 'KOR', 'Republic of Korea': 'KOR',
+            
+            'SOUTH AFRICA': 'ZAF', 'NIGERIA': 'NGA', 'KENYA': 'KEN', 'ETHIOPIA': 'ETH',
+            'UGANDA': 'UGA', 'GHANA': 'GHA', 'CAMEROON': 'CMR', 'SENEGAL': 'SEN',
+            
+            'SWEDEN': 'SWE', 'NORWAY': 'NOR', 'FINLAND': 'FIN', 'DENMARK': 'DNK',
+            
+            'NETHERLANDS': 'NLD', 'THE NETHERLANDS': 'NLD', 'HOLLAND': 'NLD', 'Netherlands': 'NLD',
+            
+            'BELGIUM': 'BEL', 'SWITZERLAND': 'CHE', 'AUSTRIA': 'AUT', 
+            'POLAND': 'POL', 'TURKEY': 'TUR', 'TURKIYE': 'TUR', 'GREECE': 'GRC',
+            
+            'MEXICO': 'MEX', 'ARGENTINA': 'ARG', 'CHILE': 'CHL', 'COLOMBIA': 'COL', 
+            'PERU': 'PER', 'VENEZUELA': 'VEN', 'ECUADOR': 'ECU',
+            
+            'THAILAND': 'THA', 'INDONESIA': 'IDN', 'MALAYSIA': 'MYS', 'SINGAPORE': 'SGP',
+            'VIETNAM': 'VNM', 'PHILIPPINES': 'PHL', 'MYANMAR': 'MMR', 'BURMA': 'MMR',
+            
+            'PAKISTAN': 'PAK', 'BANGLADESH': 'BGD', 'SRI LANKA': 'LKA', 'NEPAL': 'NPL',
+            
+            'IRAN': 'IRN', 'IRAQ': 'IRQ', 'SAUDI ARABIA': 'SAU', 'KUWAIT': 'KWT',
+            'UNITED ARAB EMIRATES': 'ARE', 'UAE': 'ARE', 'U ARAB EMIRATES': 'ARE', 'QATAR': 'QAT', 'OMAN': 'OMN',
+            
+            'ISRAEL': 'ISR', 'EGYPT': 'EGY', 'MOROCCO': 'MAR', 'TUNISIA': 'TUN',
+            'ALGERIA': 'DZA', 'LIBYA': 'LBY', 'SUDAN': 'SDN', 'TANZANIA': 'TZA',
+            
+            'NEW ZEALAND': 'NZL', 'PAPUA NEW GUINEA': 'PNG', 'FIJI': 'FJI',
+            
+            'IRELAND': 'IRL', 'PORTUGAL': 'PRT', 'ROMANIA': 'ROU', 'HUNGARY': 'HUN',
+            'CZECH REPUBLIC': 'CZE', 'CZECHIA': 'CZE', 'SLOVAKIA': 'SVK', 'SLOVENIA': 'SVN',
+            'CROATIA': 'HRV', 'SERBIA': 'SRB', 'BULGARIA': 'BGR', 'UKRAINE': 'UKR',
+            'BELARUS': 'BLR', 'LITHUANIA': 'LTU', 'LATVIA': 'LVA', 'ESTONIA': 'EST',
+            
+            # Special cases from your data
+            'TAIWAN': 'TWN', 'Taiwan': 'TWN',
+            'HONG KONG': 'HKG', 'Hong Kong': 'HKG',
+            'CUBA': 'CUB',
+            'ARMENIA': 'ARM',
         }
         
-        # Add custom regex-based matching for special cases
+        # Add custom mapping function with fallbacks
         def map_country_to_code(country_name):
+            # Direct mapping
             if country_name in country_name_to_code:
                 return country_name_to_code[country_name]
             
-            # Try lowercase comparison
-            lower_name = country_name.lower()
-            for name, code in country_name_to_code.items():
-                if name.lower() == lower_name:
-                    return code
+            # Try uppercased version
+            upper_name = country_name.upper()
+            if upper_name in country_name_to_code:
+                return country_name_to_code[upper_name]
             
-            # Default: return the original name (px.choropleth will try to match it)
+            # Try with common cleanup
+            cleaned_name = upper_name.replace("  ", " ").strip()
+            if cleaned_name in country_name_to_code:
+                return country_name_to_code[cleaned_name]
+                
+            # Default fallback: return the original name (px.choropleth will try to match it)
             return country_name
         
         # Apply country code conversion
         df_map['iso_alpha'] = df_map['country'].apply(map_country_to_code)
+        
+        # Debug: print countries and their ISO codes
+        # print("Countries in dataset:")
+        # for idx, row in df_map.iterrows():
+        #     print(f"Country: {row['country']}, Count: {row['count']}, ISO: {row['iso_alpha']}")
         
         if discrete_colors:
             # Create discrete color bins
@@ -150,6 +212,11 @@ class Visualizer:
             
             # Add a categorical column for the bins
             df_map['count_category'] = pd.cut(df_map['count'], bins=bins, labels=labels, right=False)
+            
+            # # Debug: print country categories
+            # print("Country categories:")
+            # for idx, row in df_map.iterrows():
+            #     print(f"Country: {row['country']}, Count: {row['count']}, Category: {row['count_category']}")
             
             # Define custom colors with bright colors for small values
             # Use a distinctive palette that makes smaller values more visible
