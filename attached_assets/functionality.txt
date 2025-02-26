@@ -1,0 +1,128 @@
+
+
+
+## General Features
+1. Sidebar (Left-Side Menu)
+   - Search bar: Users can search for specific titles.
+   - Citation Number (Range Slider): Users can filter publications based on the number of citations.
+   - Publication Year (Range Slider): Users can filter based on publication year.
+   - Country Selection (Dropdown, Multi-select, Top 20 Countries): Users can filter by country.
+   - Institution Selection (Dropdown, Multi-select, Top 20 Institutions): Users can filter by institution.
+   - Journal Selection (Dropdown, Multi-select, Top 20 Journals): Users can filter by journal.
+
+---
+
+## Page 1: Main Page (Overview)
+### Data Visualizations and Metrics
+1. Row 1: High-Level Metrics (KPI Cards)
+   - Total Articles
+   - Total Authors
+   - Total Institutions
+   - Total Countries
+   - Total Citations
+
+2. Row 2: Publication and Citation Trends
+   - Column 1: Line plot showing the number of publications per year.
+   - Column 2: Heatmap showing citations per year.
+
+3. Row 3: Top Contributors
+   - Column 1: Histogram showing the Top 10 Published Authors.
+   - Column 2: Histogram showing the Top 10 Contributing Countries.
+   - Column 3: Histogram showing the Top 10 Publishing Institutions.
+
+4. Row 4: Geographical Distribution
+   - World Map: Number of articles published per country.
+
+5. Row 5: Funding Insights
+   - Word Cloud: Visualization of funding details extracted from publications.
+
+---
+
+## Page 2: Authors Discovery
+### Detailed Author Analysis
+1. Row 1: Author Search
+   - Search box to find a specific author.
+
+2. Row 2: Author-Level Metrics
+   - Total Number of Authors.
+   - Total Single-Authored Documents.
+   - Total Multi-Authored Documents.
+   - Total Number of Citations.
+
+3. Row 3: Top Authors Over Time
+   - Fancy Plot: Top 20 authors and their number of publications over time.
+
+4. Row 4: Author Collaboration Network
+   - Interactive Network Visualization: Collaboration relationships between authors.
+
+5. Row 5: Document Discovery (Click on Author for Details)
+   - Column 1: Clickable Histogram or Bubble Plot for the top 20 authors.
+   - Column 2: When an author is clicked:
+     - Row 1: Show a word cloud of extracted keywords for that author.
+     - Row 2: Line plot showing the number of publications per year for the selected author.
+
+6. Row 6: Article List (Expandable)
+   - When an author is selected, list their associated articles.
+   - Show only the title initially.
+   - Expand to reveal year, author list, title, and abstract.
+
+---
+
+## Page 3: Topic Discovery
+### Text Preprocessing
+- Perform text cleaning (remove stopwords, punctuation, and standardize text).
+- Create a unified text field for topic modeling:  
+  ```python
+  data['title'] = data['title'].fillna('')
+  data['abstract'] = data['abstract'].fillna('')
+  text = data['title'] + ' ' + data['abstract']
+  ```
+
+### Topic Exploration & Trends
+1. Row 1: Keyword Evolution
+   - Line plot showing the evolution of keywords over the years.
+
+2. Row 2: Topic Modeling
+   - LDA (Latent Dirichlet Allocation) Visualization: Identify research topics.
+   - Provide suggested topic names based on dominant words.
+
+3. Row 3: Topic Trends
+   - Volcano Plot: Track topic trends over time.
+
+4. Row 4: Topic-Specific Author Discovery
+   - Clicking on a topic lists corresponding authors.
+   - Column 1: Clickable Bubble Plot or History Chart for all topics.
+   - Column 2: When a topic is clicked:
+     - Row 1: Show a word cloud of extracted keywords for that topic.
+
+5. Row 5: Article List (Expandable)
+   - When a topic is selected, list corresponding articles.
+   - Show only the title initially.
+   - Expand to reveal year, author list, title, and abstract.
+
+---
+
+## Data Format
+- The data will be supplied in CSV format (`df.csv`) with the following fields:
+  ```plaintext
+  abbrev_source_title, abstract, address, affiliation, affiliation_, art_number, author, 
+  author_email, author_keywords, book_group_author, booktitle, chemicals_cas, coden, 
+  correspondence_address1, document_type, doi, earlyaccessdate, editor, eissn, 
+  funding_acknowledgement, funding_details, funding_text, funding_text 1, funding_text 2, 
+  funding_text 3, isbn, issn, journal, keywords, language, meeting, month, note, note_, 
+  number, number_of_cited_references, oa, orcid_numbers, page_count, pages, publisher, 
+  pubmed_id, references, research_areas, researcherid_numbers, series, source, sponsors, 
+  title, tradenames, unique_id, url, usage_count_last_180_days, usage_count_since_2013, 
+  volume, web_of_science_categories, web_of_science_index, year
+  ```
+
+---
+
+### Expected Functionalities
+- Use Streamlit for the frontend.
+- Use Pandas for data handling and analysis.
+- Use Matplotlib/Plotly/Seaborn for visualizations.
+- Implement NetworkX/Dash Cytoscape for author collaboration networks.
+- Use Gensim/SpaCy/NLTK for text preprocessing and topic modeling.
+- Ensure interactive and clickable visualizations for enhanced user experience.
+

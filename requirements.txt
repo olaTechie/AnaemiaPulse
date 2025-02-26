@@ -1,0 +1,16 @@
+gensim==4.3.3
+matplotlib==3.10.0
+networkx==3.4.2
+nltk==3.9.1
+numpy==2.2.3
+packaging==24.2
+pandas==2.2.3
+plotly==6.0.0
+pyLDAvis==3.4.1
+pyLDAvis==3.4.1
+python_louvain==0.16
+scikit_learn==1.6.1
+scipy==1.15.2
+streamlit==1.42.2
+streamlit_plotly_events==0.0.6
+wordcloud==1.9.4

@@ -1,0 +1,60 @@
+help add these two topic discovery page 
+
+at the top
+
+for LDA please use abstract and title
+
+
+# --- Keywords Map ---
+st.header("Keywords Map")
+if 'keywords' in df.columns:
+    def build_keyword_network(keywords_series):
+        G = nx.Graph()
+        for keywords in keywords_series.dropna():
+            # Assuming keywords are separated by semicolons
+            keyword_list = [kw.strip() for kw in keywords.split(';')]
+            for i, kw in enumerate(keyword_list):
+                for kw2 in keyword_list[i+1:]:
+                    if G.has_edge(kw, kw2):
+                        G[kw][kw2]['weight'] += 1
+                    else:
+                        G.add_edge(kw, kw2, weight=1)
+        return G
+
+    G = build_keyword_network(df['keywords'])
+    
+    # Plot using matplotlib (you could also use Plotly for interactive plots)
+    plt.figure(figsize=(10, 8))
+    pos = nx.spring_layout(G, k=0.5)
+    # Normalize edge widths for better visualization
+    edges = G.edges(data=True)
+    weights = [data['weight'] for _, _, data in edges]
+    nx.draw_networkx(G, pos, with_labels=True, width=[w*0.1 for w in weights], node_color='lightblue', font_size=8)
+    st.pyplot(plt)
+else:
+    st.write("No 'keywords' column found.")
+
+
+# --- LDA Visualisation ---
+st.header("LDA Topic Modelling Visualisation")
+# Here, we use the 'abstract' column for topic modeling.
+if 'abstract' in df.columns:
+    abstracts = df['abstract'].dropna().tolist()
+    if len(abstracts) > 0:
+        # Create Document-Term Matrix
+        vectorizer = CountVectorizer(stop_words='english', max_features=1000)
+        dtm = vectorizer.fit_transform(abstracts)
+        
+        # Fit LDA model (adjust number of topics as needed)
+        n_topics = 5
+        lda_model = LatentDirichletAllocation(n_components=n_topics, random_state=42)
+        lda_topics = lda_model.fit_transform(dtm)
+        
+        # Use pyLDAvis for interactive visualisation
+        panel = pyLDAvis.lda_model.prepare(lda_model, dtm, vectorizer, mds='tsne')
+        html_string = pyLDAvis.prepared_data_to_html(panel)
+        st.components.v1.html(html_string, width=1300, height=800)
+    else:
+        st.write("No abstracts available for LDA analysis.")
+else:
+    st.write("No 'abstract' column found.")
