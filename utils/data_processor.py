@@ -4,7 +4,7 @@ import re
 
 class DataProcessor:
     def __init__(self, data_path):
-        self.df = pd.read_csv(data_path)
+        self.df = pd.read_excel(data_path)
         self.preprocess_data()
         
     def extract_country(self, address):

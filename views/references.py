@@ -13,7 +13,7 @@ from utils.visualizations import Visualizer
 
 # Initialize session state
 if 'data_processor' not in st.session_state:
-    st.session_state.data_processor = DataProcessor('attached_assets/df.csv')
+    st.session_state.data_processor = DataProcessor('attached_assets/df.xlsx')
     st.session_state.text_analyzer = TextAnalyzer(st.session_state.data_processor.df)
     st.session_state.visualizer = Visualizer()
 

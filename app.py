@@ -8,6 +8,13 @@ st.set_page_config(
 
 
 # --- PAGE SETUP ---
+
+about_page = st.Page(
+    "views/about_project.py",  # Make sure to create this file
+    title="About the Project",
+    icon=":material/info:",  # Or any other icon you prefer
+)
+
 home_page = st.Page(
     "views/home.py",
     title="Overview",
@@ -17,7 +24,7 @@ home_page = st.Page(
 
 research_areas_page = st.Page(
     "views/research_areas_analysis.py",
-    title="Research Areas",
+    title="Research Disciplines",
     icon=":material/search_insights:",
 )
 
@@ -88,8 +95,21 @@ references_page = st.Page(
 # )
 
 # --- NAVIGATION SETUP WITH SECTIONS ---
+# pg = st.navigation(
+#     {
+#         "Research Insights": [home_page, research_areas_page, funding_page],
+#         "Citation Networks": [journals_page, articles_page, countries_page],
+#         "Collaboration Networks": [authors_page, organizations_page],
+#         "Analysis Tools": [visualization_page, data_explorer_page],
+#         "Knowledge Base": [references_page],
+#     }
+# )
+
+
+# --- NAVIGATION SETUP WITH SECTIONS ---
 pg = st.navigation(
     {
+        "Project Information": [about_page],
         "Research Insights": [home_page, research_areas_page, funding_page],
         "Citation Networks": [journals_page, articles_page, countries_page],
         "Collaboration Networks": [authors_page, organizations_page],

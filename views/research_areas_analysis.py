@@ -46,7 +46,7 @@ def normalize_research_areas(areas):
         elif "internal medicine" in lower_area or "general medicine" in lower_area:
             area = "General & Internal Medicine"
         elif "public health" in lower_area or "environmental health" in lower_area or "occupational health" in lower_area:
-            area = "Public, Environmental & Occupational Health"
+            area = "Public Health"
         elif "nutrition" in lower_area or "diet" in lower_area:
             area = "Nutrition & Dietetics"
         
@@ -472,7 +472,7 @@ else:
 
 # Create tabs for different views
 tab1, tab2, tab3, tab4 = st.tabs([
-    "📊 Research Area Distribution", 
+    "📊 Research Discipline Distribution", 
     "📅 Trends Over Time", 
     "🔄 Interdisciplinary Analysis",
     "🔍 Detailed Analysis"
@@ -489,7 +489,7 @@ top_areas_names = [area for area, _ in top_areas]
 
 # Tab 1: Research Area Distribution
 with tab1:
-    st.markdown('<h2 class="sub-header">📊 Research Area Distribution</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="sub-header">📊 Research Discipline Distribution</h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns([2, 4])
     
@@ -497,16 +497,16 @@ with tab1:
 
         # Add some key statistics
         st.subheader("📋 Key Statistics")
-        st.metric("Total Unique Research Areas", len(set(all_areas)))
+        st.metric("Total Unique Research Disciplines", len(set(all_areas)))
         
         if len(top_areas) > 0:
             dominant_area, dominant_count = top_areas[0]
             percentage = (dominant_count / len(all_areas)) * 100
-            st.metric("Dominant Research Area", 
+            st.metric("Dominant Research Discipline", 
                      f"{dominant_area} ({percentage:.1f}%)")
         
         # Create and display a word cloud
-        st.subheader("☁️ Research Areas Word Cloud")
+        st.subheader("☁️ Research Disciplines Word Cloud")
         
         # Get custom font path if available
         font_path = None
@@ -538,7 +538,7 @@ with tab1:
             orientation='h',
             color='Count',
             color_continuous_scale='Viridis',
-            title=f"Top {top_n} Research Areas ({year_range[0] or 'All'}-{year_range[1] or 'All'})",
+            title=f"Top {top_n} Research Disciplines ({year_range[0] or 'All'}-{year_range[1] or 'All'})",
             height=600
         )
         
@@ -584,33 +584,33 @@ with tab2:
         trend_data = create_trend_data(areas_by_year, top_areas_names)
         
         # Display trend line chart
-        st.subheader("📈 Research Area Trends")
+        st.subheader("📈 Research Discipline Trends")
         fig = px.line(
             trend_data, 
             x='Year', 
             y='Count', 
             color='Research Area',
-            title='Research Area Trends Over Time',
+            title='Research Discipline Trends Over Time',
             height=500
         )
         
         fig.update_layout(
             xaxis_title="Year",
             yaxis_title="Number of Publications",
-            legend_title="Research Area",
+            legend_title="Research Discipline",
             hovermode="x unified"
         )
         
         st.plotly_chart(fig, use_container_width=True)
         
         # Show heatmap of top areas over time
-        st.subheader("🔥 Research Area Heatmap by Year")
+        st.subheader("🔥 Research Discipline Heatmap by Year")
         
         heatmap_data = create_heatmap_data(areas_by_year, top_areas_names[:15])
         
         fig = px.imshow(
             heatmap_data.values,
-            labels=dict(x="Year", y="Research Area", color="Publications"),
+            labels=dict(x="Year", y="Research Discipline", color="Publications"),
             x=heatmap_data.columns,
             y=heatmap_data.index,
             color_continuous_scale="Viridis",
@@ -626,7 +626,7 @@ with tab2:
         st.plotly_chart(fig, use_container_width=True)
         
         # Show growth rates of research areas
-        st.subheader("🚀 Fastest Growing Research Areas")
+        st.subheader("🚀 Fastest Growing Research Discipline")
         
         growth_data = calculate_area_growth(areas_by_year, min_publications=5)
         
@@ -638,14 +638,14 @@ with tab2:
                 orientation='h',
                 color='Growth Rate',
                 color_continuous_scale='Viridis',
-                title="Top 10 Fastest Growing Research Areas",
+                title="Top 10 Fastest Growing Research Disciplines",
                 height=400
             )
             
             fig.update_layout(
                 yaxis={'categoryorder': 'total ascending'},
                 xaxis_title="Growth Rate (Percentage)",
-                yaxis_title="Research Area"
+                yaxis_title="Research Discipline"
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -661,7 +661,7 @@ with tab3:
     cooccurrence = calculate_area_cooccurrence(filtered_df, normalize=normalize_areas)
     
     # Display network graph of research area connections
-    st.subheader("🕸️ Research Area Connections")
+    st.subheader("🕸️ Research Discipline Connections")
     
     # Only include top areas to keep visualization manageable
     if len(cooccurrence) > 0:
@@ -675,7 +675,7 @@ with tab3:
         st.info("This network graph shows how research areas are connected. A line between two areas indicates that they appear together in publications. Thicker lines represent stronger connections.")
     
     # Show correlation matrix for top areas
-    st.subheader("🧩 Research Area Correlation Matrix")
+    st.subheader("🧩 Research Discipline Correlation Matrix")
     
     if len(cooccurrence) > 0:
         # Create correlation matrix
@@ -756,7 +756,7 @@ with tab4:
             st.plotly_chart(fig, use_container_width=True)
         
         # Show co-occurring research areas
-        st.subheader(f"🤝 Research Areas that Co-occur with {selected_area}")
+        st.subheader(f"🤝 Research Disciplines that Co-occur with {selected_area}")
         
         cooccurring_areas = get_cooccurring_areas(filtered_df, selected_area, normalize=normalize_areas)
         
@@ -770,14 +770,14 @@ with tab4:
                 orientation='h',
                 color='Co-occurrences',
                 color_continuous_scale='Viridis',
-                title=f"Top 15 Research Areas Co-occurring with {selected_area}",
+                title=f"Top 15 Research Disciplines Co-occurring with {selected_area}",
                 height=500
             )
             
             fig.update_layout(
                 yaxis={'categoryorder': 'total ascending'},
                 xaxis_title="Number of Co-occurrences",
-                yaxis_title="Research Area"
+                yaxis_title="Research Discipline"
             )
             
             st.plotly_chart(fig, use_container_width=True)

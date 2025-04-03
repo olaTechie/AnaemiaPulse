@@ -12,7 +12,7 @@ import numpy as np
 
 # Initialize session state for data processing
 if 'data_processor' not in st.session_state:
-    st.session_state.data_processor = DataProcessor('attached_assets/df.csv')
+    st.session_state.data_processor = DataProcessor('attached_assets/df.xlsx')
     st.session_state.text_analyzer = TextAnalyzer(st.session_state.data_processor.df)
     st.session_state.visualizer = Visualizer()
 
@@ -133,6 +133,14 @@ if st.session_state.selected_journals:
 # Main content
 st.title("Maternal Anemia Research Dashboard  🔬📊")
 
+import streamlit as st
+
+# This can be inserted in your home.py file, under the Project Overview section
+
+# Project Goals Summary with expandable component
+
+
+
 # Dashboard Summary Card Function
 def show_dashboard_summary(df):
     """Display a summary card at the top of the dashboard"""
@@ -216,10 +224,12 @@ def show_dashboard_summary(df):
     
     st.markdown('</div>', unsafe_allow_html=True)
 
+
+
 # Research Focus Area Function
 def show_research_focus(df):
-    """Display research focus area analysis section"""
-    st.markdown('<div class="tab-subheader">Research Focus Areas 🔍</div>', unsafe_allow_html=True)
+    """Display research disciplines analysis section"""
+    st.markdown('<div class="tab-subheader">Research Disciplines 🔍</div>', unsafe_allow_html=True)
     
     # Create two columns
     col1, col2 = st.columns([3, 2])
@@ -242,8 +252,8 @@ def show_research_focus(df):
             fig = px.bar(
                 research_areas,
                 orientation='h',
-                title="Top Research Focus Areas",
-                labels={'index': 'Research Area', 'value': 'Number of Publications'},
+                title="Top Research Disciplines",
+                labels={'index': 'Research Discipline', 'value': 'Number of Publications'},
                 color=research_areas.values,
                 color_continuous_scale='Viridis'
             )
@@ -667,10 +677,39 @@ def show_data_download(df):
 # Show dashboard summary at the top
 show_dashboard_summary(df)
 
+with st.expander("Project Goals and Objectives", expanded=False):
+    st.markdown("""
+    ### 🎯 Project Goals
+    
+    This comprehensive bibliometric analysis and topic modeling study aims to:
+    
+    - **Map the Knowledge Landscape** 📚: Systematically analyze the evolution and current state of maternal anaemia research globally
+    
+    - **Identify Research Gaps** 🔍: Uncover understudied areas and populations to guide future research priorities
+    
+    - **Reveal Collaboration Networks** 🤝: Visualize research partnerships and identify opportunities for enhanced collaboration
+    
+    - **Track Funding Patterns** 💰: Analyze how research funding has shaped the field and influenced priorities
+    
+    - **Monitor Emerging Trends** 📈: Identify rising research topics and methodologies in maternal anaemia investigation
+    
+    - **Support Evidence-Based Policies** 📋: Provide data-driven insights to inform health policies and interventions
+    
+    Through this dashboard, we offer researchers, policymakers, and healthcare professionals a powerful tool to navigate the complex landscape of maternal anaemia research and address this critical global health challenge affecting millions of women worldwide.
+    """)
+    
+    # # Optional: Add a citation or methodology note
+    # st.markdown("---")
+    # st.caption("""
+    # Our analysis is based on [number] publications from [time period], indexed in PubMed and Web of Science databases, 
+    # processed using standardized bibliometric methods and advanced natural language processing techniques.
+    # """)
+
+
 # Tab-based organization for the main content
 main_tabs = st.tabs([
     "Overview",
-    "Research Areas",
+    "Research Disciplines",
     "Impact Analysis", 
     "Geography",
     "Timeline", 
