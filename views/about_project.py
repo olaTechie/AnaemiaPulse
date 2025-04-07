@@ -101,7 +101,7 @@ with col2:
 # Research Methodology section
 st.markdown('<div class="section-header">🔬 Research Methodology</div>', unsafe_allow_html=True)
 
-methodology_tabs = st.tabs(["Bibliometric Analysis 📊", "Topic Modelling 🧠"])
+methodology_tabs = st.tabs(["Bibliometric Analysis 📊", "Topic Modelling 🧠", "Impact Analysis 🌟"])
 
 with methodology_tabs[0]:
     col1, col2 = st.columns([2, 3])
@@ -145,6 +145,34 @@ with methodology_tabs[1]:
         # PLACEHOLDER FOR TOPIC MODEL IMAGE
         st.image("attached_assets/topic_model.png", use_container_width=True)
         # st.image("/api/placeholder/300/300", use_column_width=True)  # Placeholder
+
+with methodology_tabs[2]:
+    col1, col2 = st.columns([2, 3])
+    
+    with col1:
+        # PLACEHOLDER FOR BIBLIOMETRIC IMAGE
+        st.image("attached_assets/impact_analysis.png", width=300)
+        # st.image("/api/placeholder/300/300", use_column_width=True)  # Placeholder
+        
+    with col2:
+        st.markdown("### Impact Analysis Approach")
+        st.markdown("""
+        Our Impact Analysis provides a multidimensional assessment of research influence and reach in maternal anaemia studies. 
+        This section offers:
+        
+        - **Citation Analysis**: Discover the most influential papers and citation patterns shaping the field
+        
+        - **Journal Impact**: Explore key publication venues and their relative importance in disseminating research
+        
+        - **Geographic Impact**: Visualize how research output and citation patterns vary across regions
+        
+        - **Emerging Influence**: Track rising stars and breakthrough studies gaining rapid recognition
+        
+        - **Interdisciplinary Reach**: Examine how anaemia research connects with and influences other medical disciplines
+        
+        These impact metrics help identify research that drives innovation and guides clinical practice, highlighting work with the greatest potential to improve maternal health outcomes worldwide.
+        """)
+      
 
 # Dashboard Features section
 st.markdown('<div class="section-header">💻 Dashboard Features</div>', unsafe_allow_html=True)
@@ -228,10 +256,12 @@ st.markdown("""
 This project was funded by the World Health Organization (WHO) as part of global efforts to address anaemia in women. We gratefully acknowledge the contributions of our research team and collaborating institutions.
 
 **Project Team:**
-- [Author List]
+- Olalekan A. Uthman, Warwick Centre for Global Health Research, Applied Health, Warwick Medical School, The University of Warwick, Coventry, UK.
+- Tabassum Firoz, Yale New Haven Health, New Haven, Connecticut, USA.
+- María Barreix, UNDP/UNFPA/UNICEF/WHO/World Bank Special Programme of Research, Development and Research Training in Human Reproduction (HRP),Department of Sexual and Reproductive Health and Research, World Health Organization, Geneve, Switzerland.
+- Lisa M Rogers, Department of Nutrition and Food Safety, World Health Organization (WHO), Geneva, Switzerland.
 
-**Collaborating Institutions:**
-- [Institution List]
+
 """)
 
 # Call to action
@@ -246,7 +276,7 @@ with col1:
 # Footer with citation information
 st.markdown('<div class="footnote">', unsafe_allow_html=True)
 st.markdown("""
-**Suggested Citation:** [Author names]. (2025). Mapping the Landscape of Anaemia Research in Women: A Bibliometric Analysis and Topic Modelling of the Literature. [Institution], [Location].
+**Suggested Citation:** Uthman OA, Firoz T, Barreix M, Rogers LM. (2025). Mapping the Landscape of Anaemia Research in Women: A Bibliometric Analysis and Topic Modelling of the Literature (https://maternalanemia.streamlit.app/).
 
 Last Updated: April 2025
 """)

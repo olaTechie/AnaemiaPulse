@@ -57,7 +57,7 @@ with st.sidebar:
             except Exception as e:
                 st.warning(f"Could not download some NLTK resources: {e}. Some features may be limited.")
     
-    n_topics = st.slider("Number of Topics", min_value=3, max_value=20, value=10)
+    n_topics = st.slider("Number of Topics", min_value=3, max_value=20, value=9)
     
     with st.expander("Advanced Parameters"):
         learning_method = st.selectbox(
