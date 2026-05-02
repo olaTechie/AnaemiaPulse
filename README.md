@@ -57,6 +57,16 @@ npm run build
 npm run preview
 ```
 
+## One-Command Deployment
+
+After committing changes, run:
+
+```bash
+npm run deploy
+```
+
+This runs linting, builds the app, and pushes `main` to the `anaemia-pulse` remote. GitHub Actions then publishes the latest build to GitHub Pages.
+
 ## GitHub Repository Setup
 
 Recommended repository name: `AnaemiaPulse`
