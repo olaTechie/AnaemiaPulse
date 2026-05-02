@@ -5,6 +5,14 @@ build/
 dist/
 wheels/
 *.egg-info
+node_modules/
+.env
+.env.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vite/
+.DS_Store
 
 # Virtual environments
 .venv
